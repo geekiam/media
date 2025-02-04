@@ -1,0 +1,31 @@
+POST {{host}}
+accept: */*
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="File"; filename="ubuntu-reference.pdf"
+
+< ubuntu-reference.pdf
+--WebAppBoundary--
+
+> Asserts/Should_be_201_created.js
+###
+
+GET {{host}}/{{fileName}}
+
+####
+
+POST {{host}}
+accept: */*
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="File"; filename="soveriegn-individual.png"
+
+< soveriegn-individual.png
+--WebAppBoundary--
+
+> Asserts/Should_be_201_created.js
+###
+
+GET {{host}}/{{fileName}}
