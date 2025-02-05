@@ -19,8 +19,7 @@ export default $config({
       url: true,
       link: [bucket],
       handler: "src/index.ts",
-      domain: domain,
-
+      domain: domain
     });
 
 

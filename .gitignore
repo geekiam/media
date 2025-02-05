@@ -1,6 +1,6 @@
 # prod
 dist/
-
+.idea
 # dev
 .yarn/
 !.yarn/releases
