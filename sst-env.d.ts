@@ -8,14 +8,6 @@ declare module "sst" {
   export interface Resource {
   }
 }
-// cloudflare 
-import * as cloudflare from "@cloudflare/workers-types";
-declare module "sst" {
-  export interface Resource {
-    "Media": cloudflare.Service
-    "MediaBucket": cloudflare.R2Bucket
-  }
-}
 
 import "sst"
 export {}
