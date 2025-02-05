@@ -5,14 +5,15 @@ export default $config({
     return {
       name: "media",
       removal: input?.stage === "production" ? "retain" : "remove",
-      protect: ["production"].includes(input?.stage),
       home: "cloudflare",
     };
   },
   async run() {
 
-    let domain = $app.stage === "production" ? "media.geekiam.systems" : "media-dev.geekiam.systems"
-    let bucket = new sst.cloudflare.Bucket("MediaBucket");
+    let domain = $app.stage === "production" ? "media.geekiam.systems" : `media-${$app.stage}.geekiam.systems`
+
+
+    let bucket = new sst.cloudflare.Bucket("Bucket");
 
 
     let media = new sst.cloudflare.Worker("Media", {

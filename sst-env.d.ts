@@ -12,8 +12,8 @@ declare module "sst" {
 import * as cloudflare from "@cloudflare/workers-types";
 declare module "sst" {
   export interface Resource {
+    "Bucket": cloudflare.R2Bucket
     "Media": cloudflare.Service
-    "MediaBucket": cloudflare.R2Bucket
   }
 }
 

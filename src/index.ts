@@ -12,7 +12,7 @@ const app = new Hono()
       let file = body['File'] as File;
       let fileExtension = file.name.split('.').pop();
       let uuidFilename = `${key}.${fileExtension}`;
-      await Resource.MediaBucket.put(`${hexkey}/${uuidFilename}`, await file.arrayBuffer(), {
+      await Resource.Bucket.put(`${hexkey}/${uuidFilename}`, await file.arrayBuffer(), {
         httpMetadata: {
           contentType: c.req.header("content-type"),
         },
@@ -27,7 +27,7 @@ const app = new Hono()
 
 app.get("/:filename", async (c) => {
     const filename = c.req.param('filename');
-    const result = await Resource.MediaBucket.get(filename) as R2ObjectBody | null;
+    const result = await Resource.Bucket.get(filename) as R2ObjectBody | null;
 
     if (result === null) {
         return c.notFound();
