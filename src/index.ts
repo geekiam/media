@@ -6,12 +6,13 @@ const app = new Hono()
 
     app.post("/*", async (c) => {
 
-      const key = crypto.randomUUID();
-      const body = await c.req.parseBody();
-      const file = body['File'] as File;
-      const fileExtension = file.name.split('.').pop();
-      const uuidFilename = `${key}.${fileExtension}`;
-    let result =  await Resource.MediaBucket.put(uuidFilename, await file.arrayBuffer(), {
+        let hexkey = c.req.header("x-pub-key");
+      let key = crypto.randomUUID();
+      let body = await c.req.parseBody();
+      let file = body['File'] as File;
+      let fileExtension = file.name.split('.').pop();
+      let uuidFilename = `${key}.${fileExtension}`;
+      await Resource.MediaBucket.put(`${hexkey}/${uuidFilename}`, await file.arrayBuffer(), {
         httpMetadata: {
           contentType: c.req.header("content-type"),
         },
@@ -19,7 +20,8 @@ const app = new Hono()
 
       return c.json({
         uuid: key,
-        filename: uuidFilename}, 201);
+        filename: `${hexkey}/${uuidFilename}`
+      }, 201);
     });
 
 
@@ -35,16 +37,16 @@ app.get("/:filename", async (c) => {
     {
         return c.notFound()
     }
-    const arrayBuffer = await new Response(result.body as any).arrayBuffer();
+    let arrayBuffer = await new Response(result.body as any).arrayBuffer();
 
     return c.body(arrayBuffer, 200, {
-        'Content-Type': getContentType(filename), // Use your existing getContentType function
+        'Content-Type': getContentType(filename),
     });
 
 })
 
 function getContentType(filename: string): string {
-    const extension = filename.split('.').pop()?.toLowerCase();
+    let extension = filename.split('.').pop()?.toLowerCase();
     switch (extension) {
         case 'jpg':
         case 'jpeg':

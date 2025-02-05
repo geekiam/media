@@ -12,10 +12,10 @@ export default $config({
   async run() {
 
     let domain = $app.stage === "production" ? "media.geekiam.systems" : "media-dev.geekiam.systems"
-    const bucket = new sst.cloudflare.Bucket("MediaBucket");
+    let bucket = new sst.cloudflare.Bucket("MediaBucket");
 
 
-    const media = new sst.cloudflare.Worker("Media", {
+    let media = new sst.cloudflare.Worker("Media", {
       url: true,
       link: [bucket],
       handler: "src/index.ts",
