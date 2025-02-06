@@ -19,6 +19,9 @@ const app = new Hono()
         },
       });
 
+        const apiUrl = new URL(c.req.url)
+        apiUrl.pathname = `/${uuidFilename}`
+        c.header("location", apiUrl.toString());
       return c.json({
         uuid: key,
         filename: `${uuidFilename}`
@@ -31,18 +34,15 @@ app.get("/:filename", async (c) => {
 
     const result = await Resource.Bucket.get(filename) as R2ObjectBody | null;
 
-    if (result === null) {
+    if (result === null || result.body === null) {
         return c.notFound();
     }
 
-    if (result.body === null)
-    {
-        return c.notFound()
-    }
 
 
 
     c.header("content-type",  getContentType(filename));
+
     // @ts-ignore
     const arrayBuffer = await new Response(result.body).arrayBuffer();
     return c.body(arrayBuffer, 200);
