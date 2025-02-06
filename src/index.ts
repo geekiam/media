@@ -1,18 +1,19 @@
 import { Hono } from 'hono'
 import {Resource}  from "sst";
 import { R2ObjectBody } from "@cloudflare/workers-types";
+import {cors} from "hono/cors";
+
 
 const app = new Hono()
-
+    app.use('/*', cors())
     app.post("/*", async (c) => {
 
-        let hexkey = c.req.header("x-pub-key");
-      let key = crypto.randomUUID();
+          let key = crypto.randomUUID();
       let body = await c.req.parseBody();
       let file = body['File'] as File;
       let fileExtension = file.name.split('.').pop();
       let uuidFilename = `${key}.${fileExtension}`;
-      await Resource.Bucket.put(`${hexkey}/${uuidFilename}`, await file.arrayBuffer(), {
+      await Resource.Bucket.put(`${uuidFilename}`, await file.arrayBuffer(), {
         httpMetadata: {
           contentType: c.req.header("content-type"),
         },
@@ -20,13 +21,14 @@ const app = new Hono()
 
       return c.json({
         uuid: key,
-        filename: `${hexkey}/${uuidFilename}`
+        filename: `${uuidFilename}`
       }, 201);
     });
 
 
 app.get("/:filename", async (c) => {
     const filename = c.req.param('filename');
+
     const result = await Resource.Bucket.get(filename) as R2ObjectBody | null;
 
     if (result === null) {
@@ -37,11 +39,14 @@ app.get("/:filename", async (c) => {
     {
         return c.notFound()
     }
-    let arrayBuffer = await new Response(result.body as any).arrayBuffer();
 
-    return c.body(arrayBuffer, 200, {
-        'Content-Type': getContentType(filename),
-    });
+
+
+    c.header("content-type",  getContentType(filename));
+    // @ts-ignore
+    const arrayBuffer = await new Response(result.body).arrayBuffer();
+    return c.body(arrayBuffer, 200);
+
 
 })
 

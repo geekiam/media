@@ -1,7 +1,7 @@
 POST {{host}}
 accept: */*
 Content-Type: multipart/form-data; boundary=WebAppBoundary
-x-pub-key: ec642f38bfef46ab7bcdb5aea1dcdc98ca20cbb4cec7fa1066cafbb5a8b07008
+
 
 --WebAppBoundary
 Content-Disposition: form-data; name="File"; filename="ubuntu-reference.pdf"
@@ -14,12 +14,15 @@ Content-Disposition: form-data; name="File"; filename="ubuntu-reference.pdf"
 
 GET {{host}}/{{fileName}}
 
+> Asserts/Should_Be_200_OK_octet.js
+
+
 ####
 
 POST {{host}}
 accept: */*
 Content-Type: multipart/form-data; boundary=WebAppBoundary
-x-pub-key: ec642f38bfef46ab7bcdb5aea1dcdc98ca20cbb4cec7fa1066cafbb5a8b07008
+
 
 --WebAppBoundary
 Content-Disposition: form-data; name="File"; filename="soveriegn-individual.png"
@@ -30,4 +33,6 @@ Content-Disposition: form-data; name="File"; filename="soveriegn-individual.png"
 > Asserts/Should_be_201_created.js
 ###
 
-GET {{host}}/{{fileName}}
+GET {{host}}{{fileName}}
+
+> Asserts/Should_Be_200_OK_png.js
