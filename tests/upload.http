@@ -1,10 +1,10 @@
 POST {{host}}
 accept: */*
-Content-Type: multipart/form-data; boundary=WebAppBoundary
+Content-Type: application/pdf
 
 
 --WebAppBoundary
-Content-Disposition: form-data; name="File"; filename="ubuntu-reference.pdf"
+Content-Disposition: form-data; name="File";
 
 < Media/ubuntu-reference.pdf
 --WebAppBoundary--
@@ -21,11 +21,11 @@ GET {{host}}/{{fileName}}
 
 POST {{host}}
 accept: */*
-Content-Type: multipart/form-data; boundary=WebAppBoundary
+Content-Type: image/png
 
 
 --WebAppBoundary
-Content-Disposition: form-data; name="File"; filename="soveriegn-individual.png"
+Content-Disposition: form-data; name="File";
 
 < Media/soveriegn-individual.png
 --WebAppBoundary--
